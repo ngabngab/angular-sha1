@@ -55,7 +55,7 @@
 
                 // 1 - prepare message schedule 'W'
                 for (var t=0;  t<16; t++) W[t] = M[i][t];
-                for (var t=16; t<80; t++) W[t] = Sha1.ROTL(W[t-3] ^ W[t-8] ^ W[t-14] ^ W[t-16], 1);
+                for (var t=16; t<80; t++) W[t] = this.ROTL(W[t-3] ^ W[t-8] ^ W[t-14] ^ W[t-16], 1);
 
                 // 2 - initialise five working variables a, b, c, d, e with previous hash value
                 a = H0; b = H1; c = H2; d = H3; e = H4;
@@ -63,10 +63,10 @@
                 // 3 - main loop
                 for (var t=0; t<80; t++) {
                     var s = Math.floor(t/20); // seq for blocks of 'f' functions and 'K' constants
-                    var T = (Sha1.ROTL(a,5) + Sha1.f(s,b,c,d) + e + K[s] + W[t]) & 0xffffffff;
+                    var T = (this.ROTL(a,5) + this.f(s,b,c,d) + e + K[s] + W[t]) & 0xffffffff;
                     e = d;
                     d = c;
-                    c = Sha1.ROTL(b, 30);
+                    c = this.ROTL(b, 30);
                     b = a;
                     a = T;
                 }
@@ -79,8 +79,8 @@
                 H4 = (H4+e) & 0xffffffff;
             }
 
-            return Sha1.toHexStr(H0) + Sha1.toHexStr(H1) + Sha1.toHexStr(H2) +
-                   Sha1.toHexStr(H3) + Sha1.toHexStr(H4);
+            return this.toHexStr(H0) + this.toHexStr(H1) + this.toHexStr(H2) +
+                   this.toHexStr(H3) + this.toHexStr(H4);
         };
 
 
@@ -150,5 +150,5 @@
         };
     }
 
-    angular.module('angular-sha1').factory('sha1', sha1);
+    angular.module('angular-sha1', []).factory('sha1', sha1);
 })(window, window.angular);
